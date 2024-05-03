@@ -83,6 +83,7 @@ void UserController::login(){
     
     
 }
+
 //create a new user
 void UserController::reg(){
     string e,p;             // to hold the emails & pw till we verify
@@ -91,6 +92,7 @@ void UserController::reg(){
     UserModel* newUser = new UserModel(e,p);
     delete userModel;       //delete original
     userModel = newUser;    //replace with new one
+    //##Save the user to file - need to add
 }
 
 //make sure we have a valid style email
@@ -127,6 +129,7 @@ bool UserController::checkPw(string& pw){
     return valid;
 }
 
+//## Need to get this working after file stuff is in
 bool UserController::verify(string em, string pw){
     return true;
 }
