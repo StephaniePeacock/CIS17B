@@ -2,7 +2,7 @@
  * File:   main.cpp
  * Author: Stephanie Peacock
  * Created on April 29, 2024, 7:11 PM
- * Purpose: 
+ * Purpose: Find out who's the most Opinionated
  */
 
 

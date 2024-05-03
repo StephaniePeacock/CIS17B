@@ -6,6 +6,7 @@
  */
 
 #include "UserModel.h"
+#include "Generics.h"
 using namespace std;
 
 //template <class T>

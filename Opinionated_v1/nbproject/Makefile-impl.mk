@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=Questionable_v1
+PROJECTNAME=Opinionated_v1
 
 # Active Configuration
 DEFAULTCONF=Debug
