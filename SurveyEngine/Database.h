@@ -5,7 +5,6 @@
  * Purpose: Database Class Specification
  */
 
-#include "Generics.h"
 using namespace std;
 
 #ifndef DATABASE_H
@@ -27,6 +26,7 @@ public:
 
     //Other Functions
     void open(bool);
+    void close(bool);
 };
 
 #endif /* DATABASE_H */

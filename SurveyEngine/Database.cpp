@@ -10,8 +10,8 @@
 using namespace std;
 
 Database::Database() {
-    userFile = "Users.bin";
-    string queryFile = "Questions.bin";
+    uFile = "Users.bin";
+    qFile = "Questions.bin";
   //  users.open();
   //  queries.opem();
 }
@@ -50,6 +50,7 @@ void Database::close(bool file){
             } else {
                 std::cout << "Question file is not open!\n";
             }
+        }
     
 }
 
