@@ -29,15 +29,17 @@ private:
 public:
     // Constructors
     Question();
-    Question(const fstream&);
+    Question(fstream&);
+    Question(const Question& other);
     // Destructor
     ~Question();
     // Accessors      
     string getQText() const     { return qText; }
     int getNumAns() const       { return numAns; }
-    int  getSize();             
+    int  getSize();             //not used right now
     int getTotalResp() const    { return totalResp; }
     bool getType() const        { return type; }
+    string getAnsTxt(int i) const    { return answers[i].aText; }
 
     // Mutators
     void setQText(const string& txt)    { qText = txt; }
@@ -47,15 +49,13 @@ public:
     //Other Functions
     void addResponse(int);
     void resetStatistics();
-    Answer* newAnswer();        //helper for addAnswer()
+    Answer& newAnswer();        //helper for addAnswer()
     void printQ();
     void showResp();
     void save(fstream&);
     void load(fstream&);
+    Question& operator=(const Question& other);
 };
-
-//For keeping track of the number of records in the file
-static int count;
 
 #endif /* QUESTION_H */
 

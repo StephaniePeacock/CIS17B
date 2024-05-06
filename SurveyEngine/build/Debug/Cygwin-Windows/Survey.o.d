@@ -1,2 +1,3 @@
-build/Debug/Cygwin-Windows/Survey.o: Survey.cpp Survey.h
+build/Debug/Cygwin-Windows/Survey.o: Survey.cpp Survey.h Question.h
 Survey.h:
+Question.h:

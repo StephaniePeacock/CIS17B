@@ -11,27 +11,33 @@
 #include <string>
 
 //default constructor
-Question::Question() : qText(""), numAns(0), answers(nullptr), 
+Question::Question() : qText(""), numAns(0), 
                        totalResp(0), type(false) {
-    count++;
+    answers = nullptr;
+    //answers = new Answer[numAns];
 }
 //constructor for loading from file
-Question::Question(const fstream& file){
-
-    
+Question::Question(fstream& file){
+    load(file);
+}
+// Copy constructor -- OMG this took so long to figure out I needed
+Question::Question(const Question& other) : qText(other.qText), numAns(other.numAns), 
+        totalResp(other.totalResp), type(other.type) {
+    //copy the answers array
     answers = new Answer[numAns];
+    for (int i = 0; i < numAns; ++i) {
+        answers[i] = other.answers[i];
     }
+}
 //destructor
 Question::~Question(){
     //delete the answers array
     delete [] answers;
     answers = nullptr;
     //decrement the count
-    count--;    
 }
-
 //Helper for addAnswer - gets the input
-Answer* Question::newAnswer(){
+Answer& Question::newAnswer(){
     //create a new structure
     Answer* newAns = new Answer;
     //now get the options
@@ -46,14 +52,16 @@ Answer* Question::newAnswer(){
             cout << "Invalid choice. Please re-enter: ";
         } else { valid = true; }
     } while(!valid);
-    cin.ignore();
+    
     //if preset, get the answer 
     if(ch == 'y' || ch == 'Y'){
         cout << "Enter the answer text: ";
+        cin.ignore();
         getline(cin,input);
         //and set the data
         newAns->aText = input;
         newAns->custom = false;
+        cout << "Answer entered is: " << newAns->aText << endl;
     } else {
         newAns->aText = "";
         newAns->custom = true;
@@ -61,7 +69,7 @@ Answer* Question::newAnswer(){
     //new answers always start with chosen 0
     newAns->chosen = 0;
     //return the new Answer
-    return newAns;
+    return *newAns;
 }
 //pushes answer to the answers array
 void Question::addAnswer(){
@@ -72,13 +80,16 @@ void Question::addAnswer(){
         temp[i] = answers[i];
     }
     //put the latest answer at the end
-    temp[numAns] = *newAnswer();
+    temp[numAns] = newAnswer();
+    cout << "Temp Answer is: " << temp[numAns].aText << endl;
     //increase the size
     numAns++;
     //delete the original
     delete [] answers;
     //set to the new array
+    cout << "assigning new answers" << endl;
     answers = temp; 
+    cout << "Resassigned answer is: " << answers[numAns-1].aText << endl;
 }
 //delete an answer
 void Question::delAnswer(int indx){
@@ -157,9 +168,35 @@ void Question::load(fstream& file){
         
     }
     //total responses
+    file.read(reinterpret_cast<char*>(&totalResp), sizeof(int));
     //type
+    file.read(reinterpret_cast<char*>(&type), sizeof(bool));
 }
-//for getting the size of the question - used as next question's ID
+// Assignment operator
+Question& Question::operator=(const Question& other) {
+    if (this != &other) {
+        //copy all the things
+        qText = other.qText;
+        numAns = other.numAns;
+        totalResp = other.totalResp;
+        type = other.type;
+        // Delete old answers array
+        delete[] answers;
+        //copy the answers array
+        answers = new Answer[numAns];
+        for (int i = 0; i < numAns; ++i) {
+            answers[i] = other.answers[i];
+        }
+    }
+    return *this;
+}
+
+
+
+
+
+
+//might use this later idk, it's here if I need it
 int Question::getSize(){
     //add all the static stuff first
     int size = sizeof(qText) + sizeof(numAns) + sizeof(totalResp) + sizeof(type);

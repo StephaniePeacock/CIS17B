@@ -13,13 +13,92 @@ using namespace std;
 
 //User Libraries
 #include "Question.h"
+#include "Survey.h"
 //Global Constants - Math/Physics/Chemistry/Conversions Only
 
 //Function Prototypes
-
+void test();
 //Execution Begins Here
 
 int main(int argc, char** argv) {
+//    test();
+    
+    //create the question object
+    string input;   //for getting all the things
+    int num;        //for any numbers we need
+    char ch;        //for any chars
+    bool valid = false;
+    fstream test;
+    Survey s;
+    //get the survey name
+    cout << "Enter the Survey name: ";
+    getline(cin,input);
+    s.setName(input);  //set it to the object
+    //get the survey description
+    cout << "Enter the Survey description: ";
+    getline(cin,input);
+    s.setAbout(input);  //set it to the object
+    //add questions until the user stops
+    do{
+        do{
+            cout << "Would you like to add a question? (Y/N)";
+            cin >> ch;
+            
+            if(ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N'){
+                cout << "Invalid choice. Please re-enter: ";
+            } else { valid = true; }
+            cin.ignore();
+        } while(!valid);
+        //yes was picked, let's add a question! 
+        if(ch == 'y' || ch == 'Y'){
+            s.addQuestion();
+            cout << "First quesiton:\n";
+            s.getQuestion(0).printQ();
+        }
+    }while (ch !='n' && ch != 'N');
+    
+    //print survey
+    cout << "Survey ID  : " << s.getID() << endl
+         << "Survey Name: " << s.getName() << endl
+         << "Description: " << s.getAbout() << endl
+         << "Num Queries: " << s.getNumQs() << endl;
+    for(int i = 0; i < s.getNumQs(); i++){
+        cout << "Question " << i+1 << ":" << endl;
+        s.getQuestion(i).printQ();
+        cout << endl;
+    }
+//    q.printQ();
+//    cout << "Enter the number of the answer you wish to delete: ";
+//    cin >> num;
+//    q.delAnswer(num-1);
+//    q.printQ();
+//    cout << "Writing to test file.\n";
+  test.open("surveys/test.bin", ios::out | ios::binary);
+    s.save(test);
+    test.close();
+    Survey b;
+    test.open("surveys/test.bin", ios::in |ios::binary);
+    cout << "Loading from file.\n\n";
+    b.load(test);
+    cout << "Survey from file:\n\n";
+    
+    //for debug - let's make sure they are there
+    //print survey
+    cout << "Survey ID  : " << b.getID() << endl
+         << "Survey Name: " << b.getName() << endl
+         << "Description: " << b.getAbout() << endl
+         << "Num Queries: " << b.getNumQs() << endl;
+    for(int i = 0; i < b.getNumQs(); i++){
+        cout << "Question " << i+1 << ":" << endl;
+        b.getQuestion(i).printQ();
+        cout << endl;
+    }
+    //remove("test.bin");
+    //Exit Program    
+    return 0;
+}
+
+void test(){
     //create the question object
     string input;   //for getting all the things
     int num;        //for any numbers we need
@@ -46,16 +125,17 @@ int main(int argc, char** argv) {
     q.delAnswer(num-1);
     q.printQ();
     cout << "Writing to test file.\n";
-    test.open("test.bin", ios::out | ios::binary);
+    test.open("surveys/test.bin", ios::out | ios::binary);
     q.save(test);
     test.close();
     Question b;
-    test.open("test.bin", ios::in |ios::binary);
+    test.open("surveys/test.bin", ios::in |ios::binary);
     cout << "Loading from file.\n\n";
     b.load(test);
     cout << "Question from file:\n\n";
     b.printQ();
+    //remove("test.bin");
     //Exit Program    
-    return 0;
+
 }
 
