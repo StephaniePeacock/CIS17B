@@ -49,7 +49,7 @@ Answer& Question::newAnswer(){
     do{
         cin >> ch;
         if(ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N'){
-            cout << "Invalid choice. Please re-enter: ";
+            cout << "Invalid choice. Please re-enter\n";
         } else { valid = true; }
     } while(!valid);
     
@@ -61,7 +61,6 @@ Answer& Question::newAnswer(){
         //and set the data
         newAns->aText = input;
         newAns->custom = false;
-        cout << "Answer entered is: " << newAns->aText << endl;
     } else {
         newAns->aText = "";
         newAns->custom = true;
@@ -81,15 +80,12 @@ void Question::addAnswer(){
     }
     //put the latest answer at the end
     temp[numAns] = newAnswer();
-    cout << "Temp Answer is: " << temp[numAns].aText << endl;
     //increase the size
     numAns++;
     //delete the original
     delete [] answers;
     //set to the new array
-    cout << "assigning new answers" << endl;
     answers = temp; 
-    cout << "Resassigned answer is: " << answers[numAns-1].aText << endl;
 }
 //delete an answer
 void Question::delAnswer(int indx){
@@ -172,7 +168,7 @@ void Question::load(fstream& file){
     //type
     file.read(reinterpret_cast<char*>(&type), sizeof(bool));
 }
-// Assignment operator
+// Assignment operator - This took WAY too long to figure out I needed
 Question& Question::operator=(const Question& other) {
     if (this != &other) {
         //copy all the things

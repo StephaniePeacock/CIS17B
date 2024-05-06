@@ -9,6 +9,7 @@
 //System Libraries
 #include <iostream>
 #include <fstream>
+#include <string>
 using namespace std;
 
 //User Libraries
@@ -73,11 +74,11 @@ int main(int argc, char** argv) {
 //    q.delAnswer(num-1);
 //    q.printQ();
 //    cout << "Writing to test file.\n";
-  test.open("surveys/test.bin", ios::out | ios::binary);
+  test.open("surveys/"+to_string(s.getID())+".bin", ios::out | ios::binary);
     s.save(test);
     test.close();
     Survey b;
-    test.open("surveys/test.bin", ios::in |ios::binary);
+    test.open("surveys/"+to_string(s.getID())+".bin", ios::in |ios::binary);
     cout << "Loading from file.\n\n";
     b.load(test);
     cout << "Survey from file:\n\n";

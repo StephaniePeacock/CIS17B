@@ -44,8 +44,5 @@ public:
     void delQuestion(int indx); //deletes a question from the survey
 };
 
-//For keeping track of the total number of surveys created
-static int count;
-
 #endif /* SURVEY_H */
 

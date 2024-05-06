@@ -5,14 +5,83 @@
  * Purpose: Survey Class Implementation
  */
 #include <iostream>
+#include <fstream>
 #include "Survey.h"
 using namespace std;
 
-Survey::Survey() : surveyID(0), name(""), about(""), numQs(0) {
+Survey::Survey() : name(""), about(""), numQs(0) {
     questions = new Question[numQs];
     for(int i = 0; i < numQs; i++){
         questions[i] = Question();
     }
+    //get the survey ID
+    //open the file
+    fstream file("SurveyIDs.bin", ios::in | ios::out | ios::binary);
+    
+    if (file.is_open()) {
+        cout << "File is open." << endl;
+    } else {
+        cout << "File is not open." << endl;
+    }
+    
+    int num = 0;
+    int* temp;  //so we can access this throughout
+    //check if it's empty
+    if(file.peek() == ifstream::traits_type::eof()){
+        //set the first ID that we can increment off of
+        surveyID = 1;
+    } else {
+        //not empty, so read in the file to get the last ID
+        //first get the size of the array
+        file.read(reinterpret_cast<char*>(&num), sizeof(int));
+        //now allocate memory
+        temp = new int[num];
+        //and read in the existing elements
+        file.read(reinterpret_cast<char*>(temp), num* sizeof(int));
+        //check if there's an available ID from a deleted survey first
+        //need to be sure we sort them before we write to file!
+        for(int i = 0; i < num; i++){
+            //current element is bigger than expected
+            if(temp[i] > i+1){
+                surveyID = i+1;
+                break;  //no need to keep checking now, gtfo
+            }
+        }   
+    }
+    //now make a new array to hold this ID
+    int* surveys = new int[num+1];
+    //copy the existing array in
+    for(int i = 0; i < num; i++) {
+        surveys[i] = temp[i];
+    }
+    //now add the new ID - increment num for writing
+    surveys[num++] = surveyID;
+    //make sure we need to sort first
+    if(num > 1){
+        //sort the array - do the Mark sort!
+        for(int i = 0;i < num-1; i++){
+            for(int j = i+1; j < num; j++){
+                if(surveys[i] > surveys[j]){
+                    surveys[i] = surveys[i]^surveys[j];
+                    surveys[j] = surveys[i]^surveys[j];
+                    surveys[i] = surveys[i]^surveys[j];
+                }
+            }
+        }
+    }
+    //move to the beginning of the file to overwrite the data
+    file.seekp(0);
+    //write the size to the file
+    file.write(reinterpret_cast<char*>(num), sizeof(int));
+    //now write the array
+    file.write(reinterpret_cast<char*>(surveys), num* sizeof(int));
+    //and close the file
+    file.close();
+    //delete the arrays
+    delete [] temp;
+    delete [] surveys;
+    temp = nullptr;
+    surveys = nullptr;
 }
 
 Survey::Survey(fstream& file) {
@@ -83,8 +152,6 @@ Question& Survey::newQuestion(){
     //get the number of answers
     cout << "How many answers will this question have: ";
     cin >> num;
-//    cin.ignore();
-    //newQ->numAns = num;
     //now add the answers (creates the array and pushes answer to it - also changes numAns)
     for(int i = 0; i < num; i++){
         newQ->addAnswer();
@@ -100,14 +167,11 @@ Question& Survey::newQuestion(){
     } while(!valid);
     //if preset, get the answer 
     if(ch == 'y' || ch == 'Y'){
-    //    cout << "Setting type to false" << endl;
         newQ->setType(false);
     } else {
-    //    cout << "Setting type to true" << endl;
         newQ->setType(true);
     }
     //return the new question
-    cout << "Returning to add question." << endl;
     return *newQ;
 }
 
@@ -120,21 +184,13 @@ void Survey::addQuestion(){
         temp[i] = questions[i];
     }
     //put the latest answer at the end
-    cout << "Adding new question" << endl;
     temp[numQs] = newQuestion();
-    cout << "Temp Answer is: " << temp[0].getAnsTxt(0) << endl;
-//    cout << "New question added." << endl;
     //increase the size
-//    cout << "increasing size of numQs" << endl;
     numQs++;
-    cout << "deleting old array" << endl;
     //delete the original
     delete [] questions;
-    cout << "old array deleted" << endl;
     //set to the new array
     questions = temp;
-    cout << "Reassigned answer is: " << questions[0].getAnsTxt(0) << endl;
-    cout << "questions set to temp array" << endl;
 }
 
 //pops a question out of the survey
