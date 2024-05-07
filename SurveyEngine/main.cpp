@@ -53,8 +53,6 @@ int main(int argc, char** argv) {
         //yes was picked, let's add a question! 
         if(ch == 'y' || ch == 'Y'){
             s.addQuestion();
-            cout << "First quesiton:\n";
-            s.getQuestion(0).printQ();
         }
     }while (ch !='n' && ch != 'N');
     
