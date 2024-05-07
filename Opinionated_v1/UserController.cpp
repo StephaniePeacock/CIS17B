@@ -11,37 +11,76 @@ using namespace std;
 
 //inital menu - login, register, quit
 void UserController::mainMenu(){
-    int choice;
+    char choice;
     userView->prompt(1); // intro menu
     cin >> choice;
     switch(choice){
-        case 1:
-            login();
-            break;
-        case 2:
-            reg();
-            break;
-        case 3:
-            return; //go back
-            break;
-        default:
-            break;
-            
-    }
-    
+        case '1':
+            login();    break;
+        case '2':
+            reg();      break;
+        case '3':
+            return;     break;
+        default: 
+            userView->err(7);     break;        
+    }  
 }
 
 //shown if user is not admin, or admin selects (take survey, view account, change account, exit)
 void UserController::userMenu(){
-
+    char choice;
+    bool quit = false;
+    do {
+        userView->prompt(4);
+        switch (choice) {
+            case '1':   //Survey menu
+                surveyMenu();               break;
+            case '2':   //displays user's info
+                userView->display();    break;
+            case '3':   //exits if the user deletes acct
+                if(!acctMenu(user)){    
+                    quit = true; }          break;
+            case '4':   //exit to main menu
+                quit = true;                break;
+            default:
+                userView->err(7);           break;
+        }
+    } while (!quit);  
 }
 
 //shown if user is admin (Manage Users, Manage Surveys, View Users, View Surveys)
 void UserController::adminMenu(){
-
+    char choice;
+    bool quit = false;
+    do{
+        userView->prompt(5);
+        cin >> choice;
+        switch(choice){
+            case '1':                             
+                userView->displayAll();     break;  //view all users
+            case '2': 
+                reg();                      break;  //add user
+            case '3': 
+                delUser(user);             break;  //delete user
+            case '4': 
+                updateUser(user); break;  //modify user menu
+            case '5': 
+                quit = true;                break;  //exit menu
+            default: 
+                userView->err(7);           break;  //invalid choice
+        }
+    } while (!quit);
 } 
 
-//So we can be D.R.Y.
+//user access to the surveys
+void UserController::surveyMenu(){}
+
+//user can modify their account details - return false if user deletes account
+bool UserController::acctMenu(User* user){
+    return true;
+}
+
+//So we can be D.R.Y.       ***DONE***
 void UserController::getInfo(string& e, string& p){
     userView->prompt(2);    // ask for email
     do{
@@ -78,8 +117,8 @@ void UserController::login(){
     //verify the user's information is correct
     cout << "Placeholder for checking the DB for valid info.\n";
     //set the model to match
-    this->userModel->setEm(e);    //## Change this to open the file & copy the user's data in
-    this->userModel->setPw(p);    //## Change this to open the file & copy the user's data in
+//    this->user->setEm(e);    //## Change this to open the file & copy the user's data in
+//    this->user->setPw(p);    //## Change this to open the file & copy the user's data in
     
     
 }
@@ -89,13 +128,13 @@ void UserController::reg(){
     string e,p;             // to hold the emails & pw till we verify
     getInfo(e,p);           // get the inputs
     //make a new model
-    UserModel* newUser = new UserModel(e,p);
-    delete userModel;       //delete original
-    userModel = newUser;    //replace with new one
+    User* newUser = new User(e,p);
+    delete user;       //delete original
+    user = newUser;    //replace with new one
     //##Save the user to file - need to add
 }
 
-//make sure we have a valid style email
+//force valid style email   ***DONE***
 bool UserController::checkEm(string& em){
     /*Regular expression! declare the pattern first
     * checks local for no . at start or end, no double dots
@@ -107,6 +146,7 @@ bool UserController::checkEm(string& em){
     return regex_match(em, pattern);
 }
 
+//password requirements     ***DONE***
 bool UserController::checkPw(string& pw){
     //initialize all to false
     bool valid = false;

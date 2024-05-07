@@ -6,8 +6,10 @@
                    projectFiles="true">
       <itemPath>Database.h</itemPath>
       <itemPath>Generics.h</itemPath>
+      <itemPath>Question.h</itemPath>
+      <itemPath>Survey.h</itemPath>
+      <itemPath>User.h</itemPath>
       <itemPath>UserController.h</itemPath>
-      <itemPath>UserModel.h</itemPath>
       <itemPath>UserView.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -18,8 +20,10 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>Database.cpp</itemPath>
+      <itemPath>Question.cpp</itemPath>
+      <itemPath>Survey.cpp</itemPath>
+      <itemPath>User.cpp</itemPath>
       <itemPath>UserController.cpp</itemPath>
-      <itemPath>UserModel.cpp</itemPath>
       <itemPath>UserView.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -51,13 +55,21 @@
       </item>
       <item path="Generics.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Question.cpp" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Question.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Survey.cpp" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Survey.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="User.cpp" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="User.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="UserController.cpp" ex="false" tool="0" flavor2="0">
       </item>
       <item path="UserController.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="UserModel.cpp" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="UserModel.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="UserView.cpp" ex="false" tool="0" flavor2="0">
       </item>
@@ -92,13 +104,21 @@
       </item>
       <item path="Generics.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Question.cpp" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Question.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Survey.cpp" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Survey.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="User.cpp" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="User.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="UserController.cpp" ex="false" tool="0" flavor2="0">
       </item>
       <item path="UserController.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="UserModel.cpp" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="UserModel.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="UserView.cpp" ex="false" tool="0" flavor2="0">
       </item>

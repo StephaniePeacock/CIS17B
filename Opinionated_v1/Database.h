@@ -27,6 +27,7 @@ public:
 
     //Other Functions
     void open(bool);
+    void close(bool);
 };
 
 #endif /* DATABASE_H */

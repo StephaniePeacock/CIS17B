@@ -36,8 +36,10 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/Database.o \
+	${OBJECTDIR}/Question.o \
+	${OBJECTDIR}/Survey.o \
+	${OBJECTDIR}/User.o \
 	${OBJECTDIR}/UserController.o \
-	${OBJECTDIR}/UserModel.o \
 	${OBJECTDIR}/UserView.o \
 	${OBJECTDIR}/main.o
 
@@ -71,15 +73,25 @@ ${OBJECTDIR}/Database.o: Database.cpp
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Database.o Database.cpp
 
+${OBJECTDIR}/Question.o: Question.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Question.o Question.cpp
+
+${OBJECTDIR}/Survey.o: Survey.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Survey.o Survey.cpp
+
+${OBJECTDIR}/User.o: User.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/User.o User.cpp
+
 ${OBJECTDIR}/UserController.o: UserController.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/UserController.o UserController.cpp
-
-${OBJECTDIR}/UserModel.o: UserModel.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/UserModel.o UserModel.cpp
 
 ${OBJECTDIR}/UserView.o: UserView.cpp
 	${MKDIR} -p ${OBJECTDIR}

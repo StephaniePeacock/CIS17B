@@ -14,14 +14,8 @@ Survey::Survey() : name(""), about(""), numQs(0) {
     for(int i = 0; i < numQs; i++){
         questions[i] = Question();
     }
-    //get the survey ID
-    //open the file
     fstream file("SurveyIDs.bin", ios::in | ios::out | ios::binary);
-    if (file.is_open()) {
-        cout << "File is open." << endl;
-    } else {
-        cout << "File is not open." << endl;
-    }
+//debug    if (file.is_open()) { cout << "File is open." << endl; } else { cout << "File is not open." << endl; }
     int num = 0;
     int *temp, *surveys;        //so we can access these throughout
     file.seekg(0, ios::end);    //move to the end
