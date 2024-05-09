@@ -4,8 +4,8 @@
  * Created on April 29, 2024, 7:46 PM
  * Purpose: User Class Specification
  */
-
-#include "Generics.h"
+#include <string>
+#include <fstream>
 using namespace std;
 
 #ifndef USER_H
@@ -54,6 +54,7 @@ public:
     
     //Other Functions
     //I NEED A COPY CONSTRUCTOR AND AN = OVERRIDE!!
+
 };
 
 #endif /* USER_H */

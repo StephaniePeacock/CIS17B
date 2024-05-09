@@ -4,9 +4,8 @@
  * Created on April 29, 2024, 7:46 PM
  * Purpose: UserController Class Implementation
  */
-
+#include <iostream>
 #include "UserController.h"
-#include "Generics.h"
 using namespace std;
 
 //inital menu - login, register, quit
@@ -173,3 +172,4 @@ bool UserController::checkPw(string& pw){
 bool UserController::verify(string em, string pw){
     return true;
 }
+

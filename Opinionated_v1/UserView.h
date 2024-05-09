@@ -4,7 +4,7 @@
  * Created on April 29, 2024, 7:46 PM
  * Purpose: UserView Class Specification
  */
-#include "Generics.h"
+
 #include "User.h"
 using namespace std;
 
