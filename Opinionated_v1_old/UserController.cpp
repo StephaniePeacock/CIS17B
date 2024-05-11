@@ -173,21 +173,3 @@ bool UserController::checkPw(string& pw){
 bool UserController::verify(string em, string pw){
     return true;
 }
-
-//admin can't modify themselves in this menu
-void UserController::updateUser(const User* admin){
-    
-}
-
-//delete a user - can't delete self
-void UserController::delUser(const User*) {}
-
-//add user to file
-void UserController::addUser(const User*){}  
-
-//get a user from the file at specific position
-void UserController::get(int, User*){}
-
-//overwrite current user data at position
-void UserController::set(int, const User&){}    
-
