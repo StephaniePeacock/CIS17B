@@ -7,6 +7,7 @@
 
 #include "User.h"
 #include "UserView.h"
+#include "Survey.h"
 
 #include <regex>
 using namespace std;
@@ -17,6 +18,7 @@ using namespace std;
 //Forward Declarations
 class User;
 class UserView;
+class Survey;
 
 class UserController {
 private:
@@ -39,9 +41,19 @@ public:
     bool checkEm(string&);          //make sure email meets formatting
     bool checkPw(string&);          //make sure pw meets formatting
     bool verify(string, string);    //verify user matches from file
+<<<<<<< Updated upstream
     //admin functions
     void delUser(const User*) {}   //delete a user - can't delete self
     void updateUser(const User*) {}  //modify a user - can't modify self
+=======
+    void updateUser(const User*);   //modify a user - can't modify self
+    //File Management Functions
+    void delUser(const User*);      //delete a user - can't delete self
+    void addUser(const User*);      //add user to file
+    void get(int, User*);           //get a user from the file at specific position
+    void set(int, const User&);     //overwrite current user data at position
+    
+>>>>>>> Stashed changes
 
 };
 
