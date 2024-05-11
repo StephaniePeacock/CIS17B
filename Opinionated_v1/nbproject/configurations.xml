@@ -4,11 +4,8 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-<<<<<<< Updated upstream
       <itemPath>Database.h</itemPath>
       <itemPath>Generics.h</itemPath>
-=======
->>>>>>> Stashed changes
       <itemPath>Question.h</itemPath>
       <itemPath>Survey.h</itemPath>
       <itemPath>User.h</itemPath>
@@ -22,6 +19,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>Database.cpp</itemPath>
       <itemPath>Question.cpp</itemPath>
       <itemPath>Survey.cpp</itemPath>
       <itemPath>User.cpp</itemPath>
@@ -51,15 +49,12 @@
       </toolsSet>
       <compileType>
       </compileType>
-<<<<<<< Updated upstream
       <item path="Database.cpp" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Database.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Generics.h" ex="false" tool="3" flavor2="0">
       </item>
-=======
->>>>>>> Stashed changes
       <item path="Question.cpp" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Question.h" ex="false" tool="3" flavor2="0">
@@ -103,15 +98,12 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-<<<<<<< Updated upstream
       <item path="Database.cpp" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Database.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Generics.h" ex="false" tool="3" flavor2="0">
       </item>
-=======
->>>>>>> Stashed changes
       <item path="Question.cpp" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Question.h" ex="false" tool="3" flavor2="0">
