@@ -4,7 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>Database.h</itemPath>
       <itemPath>Generics.h</itemPath>
       <itemPath>Question.h</itemPath>
       <itemPath>Survey.h</itemPath>
@@ -19,7 +18,6 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>Database.cpp</itemPath>
       <itemPath>Question.cpp</itemPath>
       <itemPath>Survey.cpp</itemPath>
       <itemPath>User.cpp</itemPath>
@@ -49,10 +47,6 @@
       </toolsSet>
       <compileType>
       </compileType>
-      <item path="Database.cpp" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="Database.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="Generics.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Question.cpp" ex="false" tool="0" flavor2="0">
@@ -98,10 +92,6 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="Database.cpp" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="Database.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="Generics.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Question.cpp" ex="false" tool="0" flavor2="0">

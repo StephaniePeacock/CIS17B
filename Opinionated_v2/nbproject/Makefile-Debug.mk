@@ -35,7 +35,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/Database.o \
 	${OBJECTDIR}/Question.o \
 	${OBJECTDIR}/Survey.o \
 	${OBJECTDIR}/User.o \
@@ -62,16 +61,11 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opinionated_v1.exe
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opinionated_v2.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opinionated_v1.exe: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opinionated_v2.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opinionated_v1 ${OBJECTFILES} ${LDLIBSOPTIONS}
-
-${OBJECTDIR}/Database.o: Database.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Database.o Database.cpp
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/opinionated_v2 ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/Question.o: Question.cpp
 	${MKDIR} -p ${OBJECTDIR}
