@@ -6,7 +6,9 @@
  */
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 #include "Survey.h"
+#include "UserView.h"
 using namespace std;
 
 Survey::Survey() : name(""), about(""), numQs(0) {
@@ -17,11 +19,11 @@ Survey::Survey() : name(""), about(""), numQs(0) {
     //get the survey ID
     //open the file
     fstream file("SurveyIDs.bin", ios::in | ios::out | ios::binary);
-    if (file.is_open()) {
-        cout << "File is open." << endl;
-    } else {
-        cout << "File is not open." << endl;
-    }
+//    if (file.is_open()) {
+//        cout << "File is open." << endl;
+//   } else {
+//        cout << "File is not open." << endl;
+//    }
     int num = 0;
     int *temp, *surveys;        //so we can access these throughout
     file.seekg(0, ios::end);    //move to the end
@@ -29,6 +31,7 @@ Survey::Survey() : name(""), about(""), numQs(0) {
         file.seekg(0,ios::beg); //go back to the beginning
         surveyID = 1;           //set the first ID that we can increment off of
         surveys = new int[1];   //only 1 element, so make an array of 1
+        surveys[0] = surveyID;
         num++;
     } else {                    //not empty, so read in the file to get the last ID
         file.seekg(0,ios::beg); //go back to the beginning
@@ -74,7 +77,11 @@ Survey::Survey(fstream& file) {
 }
 
 Survey::~Survey() {
-    delete []questions;
+    //delete each question in the array
+ //   for (int i = 0; i < numQs; ++i) {
+ //       delete[] questions[i];
+ //   }
+    delete []questions; //now delete the array
     questions = nullptr;
 }
 //save to file
@@ -199,4 +206,49 @@ void Survey::delQuestion(int indx){
     delete [] questions;
     //set to the new array
     questions = temp;
+}
+
+//add / remove answers from a question
+void Survey::modifyQuestion(int num){
+    char choice;
+    int indx = -1;
+    bool quit = false;
+    do{
+        UserView::prompt(23);
+        cin >> choice;
+        switch(choice) {
+            case '1' :  //Add Answer
+                questions[num].addAnswer();
+                break;
+            case '2' :  //Delete Answer
+                getQuestion(num).printQ();
+                while(indx < 0 || indx > getQuestion(num).getNumAns()){    
+                    UserView::prompt(20);   //get question number
+                    cin >> indx;
+                    if(indx < 0 || indx > getQuestion(num).getNumAns()) {
+                        UserView::err(7);   //invalid choice
+                    }
+                }
+                getQuestion(num).delAnswer(indx);
+                break;
+            case '3' :  //Quit
+                quit = true;
+                break;
+            default :
+                UserView::err(7);
+                break;
+        }
+    } while (!quit);
+}
+
+//for the admin, to see the Question's responses
+void Survey::showResp(int indx) const{
+    float percent;
+    cout << questions[indx].getQText() << endl;
+    for(int i = 0; i < getQuestion(indx).getNumAns(); i++){
+        percent = (getQuestion(indx).getChosen(i)/getNumQs())*100;
+         cout << i+1 << ") " << getQuestion(indx).getAnsTxt(i)
+              << "\t\t" << fixed << setprecision(2) << percent << endl;
+    }
+    cout << endl;
 }

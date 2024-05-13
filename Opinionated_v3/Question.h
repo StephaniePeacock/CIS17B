@@ -40,6 +40,7 @@ public:
     int getTotalResp() const    { return totalResp; }
     bool getType() const        { return type; }
     string getAnsTxt(int i) const    { return answers[i].aText; }
+    int getChosen(int i) const { return answers[i].chosen; }
 
     // Mutators
     void setQText(const string& txt)    { qText = txt; }
@@ -51,7 +52,6 @@ public:
     void resetStatistics();
     Answer& newAnswer();        //helper for addAnswer()
     void printQ();
-    void showResp();
     void save(fstream&);
     void load(fstream&);
     Question& operator=(const Question& other);

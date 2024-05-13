@@ -12,6 +12,7 @@ using namespace std;
 #define USERVIEW_H
 
 class User;
+class Survey;
 
 class UserView {
 private:
@@ -22,16 +23,17 @@ public:
     UserView(const User& user) : user(user) {}  //The REAL constructor
     virtual ~UserView(){}
 
-    //User display functions
-    void display(const User&) const;      //shows current user's data  (for user)
-//    void display(int) const{}   //shows selected user's data (for admin)
-    
+    //Display Functions
+    void display(const User&) const;    //shows current user's data  (for user)
+    void surveyInfo(const Survey);      //full printout of the survey data
+    void showSurvey(const Survey);      //print out the survey & questions no data
+    void printQ(const Survey s, int indx);
 
     //Accessors
 
     //Menu Messages
-    void prompt(int);   //for textual prompts to the user
-    void err(int);      //to guide the user when there's a problem with the input
+    static void prompt(int);   //for textual prompts to the user
+    static void err(int);      //to guide the user when there's a problem with the input
 };
 
 #endif /* USERVIEW_H */

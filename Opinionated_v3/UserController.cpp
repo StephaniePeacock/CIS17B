@@ -5,6 +5,7 @@
  * Purpose: UserController Class Implementation
  */
 
+#include <fstream>
 #include "UserController.h"
 #include "Generics.h"
 using namespace std;
@@ -28,13 +29,20 @@ void UserController::mainMenu(){
                 quit = true;
                 break;
             case 'a': 
-                displayAll();  //below is emergency delete for debug
+                displayAll();   //Debug - display all Users
                 break;
-            case 'd':
+            case 'd':           //Debug - Reset Users.bin to empty
                 file.open("Users.bin", ios::out | ios::binary | ios::trunc);
                 file.close();
                 break;
-            case 'n': {
+            case 's':           //Debug - display list of surveys
+                printSurveyNames();
+                break;
+            case 'f':           //Debug - Reset SurveyIDs.bin to empty
+                file.open("SurveyIDs.bin", ios::out | ios::binary | ios::trunc);
+                file.close();
+                break;
+            case 'n': {         //Debug - create starter users
                 displayAll();
                 User admin("admin@no.com", "Password1", true, 10, 10,10);
                 addUser(&admin);
@@ -167,52 +175,107 @@ bool UserController::acctMenu(User& user){
 void UserController::adminMenu(const User& admin){
     string e;
     char choice;
-    bool quit = false;
+    int num;
+    bool stop = false;  //for outer loop
     do{
-        userView->prompt(5);
+        bool quit = false;      //for inner loop
+        userView->prompt(14);   //user or survey
         cin >> choice;
         switch(choice){
-            case '1':               //view all users            
-                displayAll();       
-                break;  
-            case '2':               //add user
-                reg();              
-                break;  
-            case '3':               //delete user
-            {
-                User user;                      //temp user
-                cin.ignore();
-                userView->prompt(2);
-                getline(cin,e);                  //get the email of the user we want to delete  
-                int pos = find(e);              //find position of user
-                if(e != admin.getEmail()){      //if not admin
-                    pos = find(e);              //find user's position
-                    if(pos != -1){
-                        get(pos, &user);        //copy data into the user
-                        delUser(pos);           //delete the user 
-                    } else { 
-                        userView->err(9);       //user not found
+            case '1' :                          //Manage Users
+                do{
+                    userView->prompt(5);
+                    cin >> choice;
+                    switch(choice){
+                        case '1':               //view all users            
+                            displayAll();       
+                            break;  
+                        case '2':               //add user
+                            reg();              
+                            break;  
+                        case '3':               //delete user
+                        {
+                            User user;                      //temp user
+                            cin.ignore();
+                            userView->prompt(2);
+                            getline(cin,e);                  //get the email of the user we want to delete  
+                            int pos = find(e);              //find position of user
+                            if(e != admin.getEmail()){      //if not admin
+                                pos = find(e);              //find user's position
+                                if(pos != -1){
+                                    get(pos, &user);        //copy data into the user
+                                    delUser(pos);           //delete the user 
+                                } else { 
+                                    userView->err(9);       //user not found
+                                }
+                            } else { 
+                                userView->err(11); 
+                                cin >> choice;      //ask user if they want to exit
+                                if(choice == 'y' || choice == 'Y') {
+                                    quit = true;    
+                                }
+                            }
+                            break;  
+                        }
+                        case '4': 
+                            updateUser(admin);   //modify user menu
+                            break;  
+                        case '5': 
+                            quit = true;        //Exit User Menu               
+                            break;  
+                        default: 
+                            userView->err(7);   //invalid choice          
+                            break;  
                     }
-                } else { 
-                    userView->err(11); 
-                    cin >> choice;      //ask user if they want to exit
-                    if(choice == 'y' || choice == 'Y') {
-                        quit = true;    
+                } while (!quit);
+                quit = false;                   //reset for other case
+                break;
+            case '2' :                          //Manage Surveys
+                do {
+                    userView->prompt(15);       //add, modify, delete, exit
+                    cin >> choice;
+                    switch(choice){
+                        case '1' :              //View Survey Data     
+                        {
+                            printSurveyNames();         //get the options
+                            num = getValidID();         //force valid choice
+                            e = "surveys/" + to_string(num) + ".bin"; //get file name
+                            file.open(e,ios::in | ios::out | ios::binary);    //open the correct file
+                            Survey s(file);             //load survey from file
+                            file.close();               //close file
+                            userView->surveyInfo(s);    //display the data
+                            break;
+                        }
+                        case '2' :              //Add Survey
+                            cin.ignore();
+                            addSurvey();
+                            break;
+                        case '3' :              //Modify Survey
+                            printSurveyNames();         //get the options
+                            num = getValidID();         //force valid choice
+                            break;
+                        case '4' :              //Delete Survey
+                                printSurveyNames();         //get the options
+                                num = getValidID();         //force valid choice
+                                deleteSurvey(num);          //delete selected
+                            break;
+                        case '5' :              //Exit Survey Menu
+                            quit = true;
+                            break;
+                        default: 
+                            userView->err(7);   //invalid choice          
+                            break;
                     }
-                }
-                break;  
-            }
-            case '4': 
-                updateUser(admin);   //modify user menu
-                break;  
-            case '5': 
-                quit = true;        //exit menu               
-                break;  
+                } while(!quit);
+                quit = false;                   //reset for other case
+                break;
+            case '3' : stop = true;             //Exit Admin Menu
+                break;
             default: 
-                userView->err(7);   //invalid choice          
-                break;  
+                userView->err(7);               //invalid choice          
+                break; 
         }
-    } while (!quit);
+    } while (!stop);
 } 
 
 //admin can't modify themselves in this menu - modified my code from Battleship
@@ -477,6 +540,166 @@ void UserController::sort(int total, User* old){
     }
 }
 
+//add a survey
+void UserController::addSurvey(){
+    string input;   //for getting all the things
+    int num;        //for any numbers we need
+    char ch;        //for any chars
+    bool valid = false;
+    Survey s;
+    //get the survey name
+    userView->prompt(16);
+    getline(cin,input);
+    s.setName(input);  //set it to the object
+    //get the survey description
+    userView->prompt(17);
+    getline(cin,input);
+    s.setAbout(input);  //set it to the object
+    //add questions until the user stops
+    do{
+        do{
+            userView->prompt(18);
+            cin >> ch;
+            
+            if(ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N'){
+                userView->err(7);   //invalid choice 
+            } else { valid = true; }
+            cin.ignore();
+        } while(!valid);
+        //yes was picked, let's add a question! 
+        if(ch == 'y' || ch == 'Y'){
+            s.addQuestion();
+        }
+    }while (ch !='n' && ch != 'N');
+    file.open("surveys/"+to_string(s.getID())+".bin", ios::out | ios::binary);
+    s.save(file);
+    file.close();
+}
+
+//delete a survey
+void UserController::deleteSurvey(int num){
+    file.open("SurveyIDs.bin", ios::in | ios::out | ios::binary);
+    int numSurveys;
+    file.read(reinterpret_cast<char*>(&numSurveys), sizeof(int));
+    int *temp = new int[numSurveys-1];  //1 smaller than current
+    for(int i = 0; i < num; i++){       //read in before
+        file.read(reinterpret_cast<char*>(&temp[i]), sizeof(int));
+    }
+    file.seekp(sizeof(int), ios::cur);  //skip the one to delete
+    for(int i = num; i < numSurveys -1; i++){
+        file.read(reinterpret_cast<char*>(&temp[i]), sizeof(int));
+    }
+    file.close();               //close the file so we can empty it
+    file.open("SurveyIDs.bin", ios::out | ios::binary | ios::trunc);
+    file.close();               //close empty file
+    file.open("SurveyIDs.bin", ios::in | ios::out | ios::binary);
+    file.seekp(0, ios::beg);    //go to beginning
+    numSurveys--;               //remove extra then write to file
+    file.write(reinterpret_cast<char*>(&numSurveys), sizeof(int));
+    for(int i = 0; i < numSurveys; i++){  //write array to file
+        file.write(reinterpret_cast<char*>(&temp[i]), sizeof(int));
+    }
+    file.close();               //close the file
+    delete []temp;              //clean up the garbage
+    //now we need to remove survey file from directory
+    remove(("surveys/" + to_string(num) + ".bin").c_str());
+}
+
+//choose a survey to modify
+void UserController::modifySurvey(int num){
+    char choice;
+    int q = -1;
+    bool quit = false;
+    file.open("surveys/" + to_string(num) + ".bin", ios::in | ios::out | ios::binary);
+    Survey s(file); //load survey from file
+    file.close();
+    do {
+        userView->prompt(20);
+        cin >> choice;
+        switch(choice){
+            case '1' :                      //Modify question
+                userView->showSurvey(s);              //print the survey
+                while(q < 0 || q > s.getNumQs()){    
+                    userView->prompt(20);   //get question number
+                    cin >> q;
+                    if(q < 0 || q > s.getNumQs()) {
+                        userView->err(7);   //invalid choice
+                    }
+                }
+                s.modifyQuestion(q-1);
+                break;
+            case '2' :                      //add question
+                s.addQuestion();
+                break;
+            case '3' :                      //delete question
+                userView->showSurvey(s);              //print the survey
+                while(q < 0 || q > s.getNumQs()){    
+                    userView->prompt(20);   //get question number
+                    cin >> q;
+                    if(q < 0 || q > s.getNumQs()) {
+                        userView->err(7);   //invalid choice
+                    }
+                }
+                s.delQuestion(q-1);
+                break;
+            case '4' :                      //exit Menu
+                quit = true;
+                break;
+            default : userView->err(7);     //invalid choice
+                break;       
+        }
+    } while(!quit);
+}
+
+//print IDs and names for all existing surveys ***DONE***
+void UserController::printSurveyNames() {
+    file.open("SurveyIDs.bin", ios::in | ios::binary);
+    int numSurveys, nameSize, surveyID; 
+    string fileName, surveyName;
+    fstream surveyFile;
+    file.read(reinterpret_cast<char*>(&numSurveys), sizeof(int));
+    
+    for (int i = 0; i < numSurveys; ++i) {
+        //read in survey ID
+        file.read(reinterpret_cast<char*>(&surveyID), sizeof(int));
+        fileName = "surveys/" + to_string(surveyID) + ".bin";   // set filename
+        surveyFile.open(fileName, ios::in | ios::binary);       //open file
+        surveyFile.seekg(sizeof(int), ios::cur);  //position the pointer past the survey ID
+        //read survey name from the survey file
+        surveyFile.read(reinterpret_cast<char*>(&nameSize), sizeof(int));
+        
+        surveyName.resize(nameSize);        //size the string w/ null terminator
+        surveyFile.read(&surveyName[0], nameSize);  //and pop it in
+        cout << surveyID << ") " << surveyName << endl;
+        surveyFile.close();                         //close the survey file
+    }
+    file.close();       //close the index file
+}
+
+//force user to pick a survey that exists
+int UserController::getValidID(){
+    int choice, numSurveys, surveyID;
+    bool valid = false, found = false;
+    while(!valid){
+        userView->prompt(19);   //ask for input
+        cin >> choice;          //get the chosen ID
+        file.open("SurveyIDs.bin", ios::in | ios::binary); //open file
+        //get number of surveys
+        file.read(reinterpret_cast<char*>(&numSurveys), sizeof(int));
+        for (int i = 0; i < numSurveys; ++i) {  //check all IDs
+            file.read(reinterpret_cast<char*>(&surveyID), sizeof(int));
+            if (surveyID == choice) {   //ID matches choice
+                found = true;           //we found it!
+                break;                  //gtfo
+            }
+        }
+        file.close();   //close index file
+        found ? valid = true : valid = false, userView->err(7);    //gtfo if found or err if invalid
+    }
+    return choice;
+}
+
+
 /*************************************************
  * Borrowed from Battleship with Hannes approval *
  *************************************************/
@@ -537,4 +760,5 @@ int UserController::find(string email) {
     file.close();       //close file
     return pos;
 }
+
 

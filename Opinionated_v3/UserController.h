@@ -24,7 +24,7 @@ class UserController {
 private:
     User *user;
     UserView  *userView;
-    Survey *survey;     
+//    Survey *survey;     //i forgot to use this, all surveys are local omfg
     fstream file;  //gonna try for all file operations
 //    fstream sfile;  //current survey file
 //    fstream ifile;  //index file for list of surveys
@@ -51,7 +51,7 @@ public:
     bool verify(string, string);    //verify user matches from file
     
     //File Management Functions
-    void delUser(int pos);      //delete a user - can't delete self
+    void delUser(int pos);          //delete a user - can't delete self
     void addUser(const User*);      //add user to file
     void get(int, User*);           //get a user from the file at specific position
     void set(int, const User&);     //overwrite current user data at position
@@ -61,7 +61,15 @@ public:
     void sort(int, User*);          //for sorting the users before we pop them in
     void displayAll();              //for admin to view all
     
+    //Survey functions
+    void addSurvey();               //add a survey
+    void deleteSurvey(int);         //delete survey from index & survey file
+    void modifySurvey(int num);     //change existing survey
 
+    void printSurveyNames();        //gets IDs from index file, opens each survey
+                                    //and prints the ID & survey name of each survey
+    int  getValidID();              //force user to pick a valid survey
+    
 };
 
 #endif /* USERCONTROLLER_H */

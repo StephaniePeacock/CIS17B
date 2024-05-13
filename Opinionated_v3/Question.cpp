@@ -9,6 +9,7 @@
 #include <cstring>
 #include <fstream>
 #include <string>
+#include <iomanip>
 
 //default constructor
 Question::Question() : qText(""), numAns(0), 
@@ -31,10 +32,8 @@ Question::Question(const Question& other) : qText(other.qText), numAns(other.num
 }
 //destructor
 Question::~Question(){
-    //delete the answers array
     delete [] answers;
     answers = nullptr;
-    //decrement the count
 }
 //Helper for addAnswer - gets the input
 Answer& Question::newAnswer(){
@@ -117,10 +116,7 @@ void Question::printQ(){
     }
     cout << endl;
 }
-//for the admin, to see the Question's responses
-void Question::showResp(){
 
-}
 //save the question to the file
 void Question::save(fstream& file){
     //write the question text

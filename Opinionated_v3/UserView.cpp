@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "UserView.h"
+#include "Survey.h"
 using namespace std;
 
 //for textual prompts to the user
@@ -81,6 +82,54 @@ void UserView::prompt(int choice){
         case 13:
             cout << "Enter the email of the user you wish to modify.\n"
                     ">> ";
+            break;
+        case 14:
+            cout << "[1] Manage Users\n"
+                    "[2] Manage Surveys\n"
+                    "[3] Exit Menu\n"
+                    ">> ";
+            break;
+        case 15:
+            cout << "[1] View Survey Data\n"
+                    "[2] Add Survey\n"
+                    "[3] Modify Survey\n"
+                    "[4] Delete Survey\n"
+                    "[5] Exit Menu\n"
+                    ">> ";
+            break;
+        case 16:
+            cout << "Enter the Survey name: ";
+            break;
+        case 17:
+            cout << "Enter the Survey description: ";
+            break;
+        case 18:
+            cout << "Would you like to add a question? (Y/N)";
+            break;
+        case 19:
+            cout << "Enter the survey ID: ";
+            break;
+        case 20:
+            cout << "[1] Modify Question\n"
+                    "[2] Add Question\n"
+                    "[3] Delete Question\n"
+                    "[4] Exit Menu\n"
+                    ">> ";
+            break;
+        case 21:
+            cout << "Enter question number: ";
+            break;
+        case 22:
+            cout << "Enter answer number: ";
+            break;
+        case 23:
+            cout << "[1] Add Answer\n"
+                    "[2] Delete Answer\n"
+                    "[3] Exit Menu\n"
+                    ">> ";
+            break;
+        case 24:
+            break;
         default: break;
     }
 }
@@ -134,4 +183,34 @@ void UserView::display(const User& user) const {
          << "Surveys Completed  : " << user.getNumSurveys() << endl
          << "Questions Answered : " << user.getNumQuestions() << endl
          << "Current Rank       : " << user.getRank() << endl << endl;
+}
+
+//get survey stats - for admin
+void UserView::surveyInfo(const Survey s){
+    cout << "Survey ID  : " << s.getID() << endl
+         << "Survey Name: " << s.getName() << endl
+         << "Description: " << s.getAbout() << endl
+         << "Num Queries: " << s.getNumQs() << endl;
+    for(int i = 0; i < s.getNumQs(); i++){
+        cout << "Question " << i+1 << ":" << endl;
+        cout << "\tAnswer\t\tSelected" << endl;
+        s.showResp(i);
+        cout << endl;
+    }
+}
+
+//print selected question for answering
+void UserView::printQ(const Survey s, int indx){
+    s.getQuestion(indx).printQ();
+    cout << endl;
+}
+
+//print survey name & all questions
+void UserView::showSurvey(const Survey s){
+    cout << s.getName() << endl;
+    for(int i = 0; i < s.getNumQs(); i++){
+        cout << i+1 << ") ";
+        printQ(s,i);
+    }
+    
 }
