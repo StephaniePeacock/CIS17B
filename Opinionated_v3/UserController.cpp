@@ -232,6 +232,7 @@ void UserController::adminMenu(const User& admin){
                 break;
             case '2' :                          //Manage Surveys
                 do {
+                    quit = false;
                     userView->prompt(15);       //add, modify, delete, exit
                     cin >> choice;
                     switch(choice){
